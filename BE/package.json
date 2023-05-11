@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon run"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "express": "^4.18.2",
     "helmet": "^7.0.0",
     "mongodb": "^5.4.0",
+    "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22",
     "yarn": "^1.22.19"
