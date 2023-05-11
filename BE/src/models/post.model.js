@@ -2,21 +2,14 @@ import mongoose from "mongoose";
 
 const PostSchema = new mongoose.Schema(
   {
-    userId: {
+    message: {
       type: String,
       required: true,
     },
-    desc: {
+    sender: {
       type: String,
-      max: 500,
-    },
-    img: {
-      type: String,
-    },
-    likes: {
-      type: Array,
-      default: [],
-    },
+      required: true,
+    }
   },
   { timestamps: true }
 );
