@@ -1,19 +1,12 @@
 import dotenv from "dotenv";
-import mongoose from "mongoose";
-
+import { MongoClient, ServerApiVersion } from "mongodb";
 
 dotenv.config();
 
-export const client = () => {
-    mongoose
-        .connect(process.env.MONGODB_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        })
-        .then(() => {
-        console.log("DB Connetion Successfull");
-        })
-        .catch((err) => {
-        console.log(err.message);
-    })
-};
+export const client = new MongoClient(process.env.MONGODB_URL, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true
+    }
+});

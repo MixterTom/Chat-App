@@ -8,6 +8,5 @@ import {client} from "./src/database/connect.js"
 dotenv.config();
 const server = express();
 
-client();
 server.use(app);
 server.listen(serverConfig.port);

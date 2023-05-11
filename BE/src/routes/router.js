@@ -1,7 +1,9 @@
 import express from "express";
-import router from "./post.router.js";
+
+import postRouter from "./post.router.js";
 
 const indexRouter = express();
-indexRouter.use('/chat', router);
+
+indexRouter.use('/v1', postRouter);
 
 export default indexRouter;
