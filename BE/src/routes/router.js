@@ -1,9 +1,9 @@
 import express from "express";
 
-import postRouter from "./post.router.js";
+import PostRouter from "./PostRouter.js";
 
 const indexRouter = express();
 
-indexRouter.use('/v1', postRouter);
+indexRouter.use('/v1', PostRouter);
 
 export default indexRouter;

@@ -1,5 +1,4 @@
 import { client } from "../database/connect.js";
-import { ObjectId } from "mongodb";
 
 class PostModel {
     constructor(database, collection) {

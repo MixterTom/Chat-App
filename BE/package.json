@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon run"
+    "dev": "nodemon run"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22",
+    "socket.io": "^4.6.1",
     "yarn": "^1.22.19"
   }
 }
