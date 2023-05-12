@@ -1,0 +1,18 @@
+.tool-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 1.4rem;
+    border-bottom: 1px solid #333;
+}
+
+
+.blur-pointer-power:hover {
+    cursor: pointer;
+    opacity: 0.3;
+}
+
+.blur-pointer:hover {
+    cursor: pointer;
+    opacity: 0.3;
+}

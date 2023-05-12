@@ -1,0 +1,44 @@
+
+
+.stick-bottom{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
+.box-icon {
+    transition: all 1s ease-out;
+}
+
+.divide{
+    padding: 10px 0px;
+    border-top: 2px solid #333;
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+  
+    > .col,
+    > [class*="col-"] {
+      padding-right: 0;
+      padding-left: 0;
+    }
+}
+
+.file-icon:hover {
+    opacity: 0.8;
+    box-shadow: 2px 2px #333;
+}
+
+.tool{
+    display: flex;
+    justify-content:space-between;
+}
+
+.hiding{
+    display: none;
+}
