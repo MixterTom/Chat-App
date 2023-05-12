@@ -4,6 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import indexRouter from "./routes/router.js";
 
+
 const app = express();
 
 app.use(morgan('tiny'));
@@ -18,5 +19,6 @@ app.use(
 );
 
 app.use('/api', indexRouter);
+
 
 export default app;

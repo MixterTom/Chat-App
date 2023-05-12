@@ -19,17 +19,21 @@ const httpServer = http.createServer(expressServer).listen(serverConfig.port, se
 
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: `*`,
     credentials: true,
   },
 });
 
+console.log(`http://${serverConfig.client_IP}:5173/`);
 global.onlineUsers = new Map();
 
 io.on('connection', (socket) => {
+  
+  console.log(socket.id);
+
   socket.on('send-messages', (data) => {
     console.log(data);
     postController.create(data);
-    socket.emit("messages-recieve", data.message);
+    socket.broadcast.emit("messages-recieve", {data});
   });
 });
