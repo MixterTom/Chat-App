@@ -1,5 +1,5 @@
 import Home from './pages/Home/Home'
-import Login from './pages/Login/Login'
+import { Login } from './pages/Login/Login'
 import Logout from './pages/Logout/Logout'
 import Error from './error/error'
 import './App.scss'
@@ -7,7 +7,12 @@ import { RouterProvider, createBrowserRouter, } from 'react-router-dom'
 
 const home = createBrowserRouter([
     {
-        path: "/",
+        path: '/',
+        element: <Login/>,
+        errorElement: <Error/>
+    },
+    {
+        path: "/home",
         element: <Home/>,
         errorElement: <Error/>
     },

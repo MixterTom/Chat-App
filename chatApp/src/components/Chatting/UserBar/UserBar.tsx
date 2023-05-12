@@ -3,11 +3,11 @@ import { GrGroup } from "react-icons/gr"
 
 export default function UserBar() {
     return (
-       <>
+       <div>
 
             <div
                 style={{
-                    height: "100vh"
+                    height: "100vh",
                 }}
             >
                 <div
@@ -23,9 +23,8 @@ export default function UserBar() {
                                 width: "20px"
                             }}
                         >
-                            <h4>SD Workspace</h4>
                         </GrGroup>
-
+                            <h4>SD Workspace</h4>
                         
                     </div>
                     <p>Click here!</p>
@@ -48,6 +47,6 @@ export default function UserBar() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
