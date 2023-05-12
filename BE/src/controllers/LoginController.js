@@ -1,9 +1,9 @@
 import Account from "../models/AccountModel.js";
 
-const user = new Account("chat-app", "enrollcode");
+const accounts = new Account("chat-app", "enrollcode");
 
 class LoginController {
-  async checkAuth(req, res, next) {
+  async checkAuth(req, res) {
       const { username, enroll } = req.body;
       const fixedEnroll = "SD2023";
 
@@ -12,7 +12,6 @@ class LoginController {
       } else {
         res.json({ message: "Invalid username or password", status: false });
       }
-    next();
   }
 
   async authUser(req, res) {
@@ -28,19 +27,12 @@ class LoginController {
       res.status(401);
       throw new Error("Invalid Username or EnrollmentCode");
     }
-    next();
   }
 
   // Save code
-  async create(data) {
-    const newUser = new user(req.body);
-    try {
-      const savedUsername = await newUser.save(data);
-      res.status(200).json(savedUsername);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-    next();
+  async create(req, res) {
+    const data = req.body;
+    await accounts.save(data);
   }
 }
 

@@ -12,13 +12,14 @@ const expressServer = express();
 
 expressServer.use(app);
 
-const httpServer = http.createServer(expressServer).listen(serverConfig.port, () =>
-  console.log(`Server started on ${serverConfig.port}`)
-);
+const httpServer = http.createServer(expressServer).listen(serverConfig.port, serverConfig.host, () => {
+  console.log(`Server started on ${serverConfig.port}`);
+  console.log(`Link: http://${serverConfig.host}:${serverConfig.port}/api/v1/read`);
+});
 
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5173',
     credentials: true,
   },
 });
@@ -26,11 +27,6 @@ const io = new Server(httpServer, {
 global.onlineUsers = new Map();
 
 io.on('connection', (socket) => {
-  global.chatSocket = socket;
-  socket.on('add-user', (userId) => {
-    onlineUsers.set(userId, socket.id);
-  });
-
   socket.on('send-messages', (data) => {
     console.log(data);
     postController.create(data);
