@@ -1,15 +1,16 @@
 import { MdInsertEmoticon, MdOutlineAttachFile } from "react-icons/md"
 import { AiOutlineSend } from "react-icons/ai"
 import { useState } from "react"
-import axios from "axios"
 import "./Typing.scss"
 import { io } from "socket.io-client"
 
-const socket = io('http://localhost:3000').connect()
+
+
+const socket = io("http://192.168.1.37:3000").connect()
 
 export default function Typing() {
     const [message, setInput] = useState("")
-
+    
     //For user when they press Enter
     function enterToSend(e: any) {
         if (e.keycode == 13) {
@@ -34,13 +35,18 @@ export default function Typing() {
     }
 
     //Send message
+
+
+    var userName = localStorage.getItem('name');
     async function fetchApi(e: any) {
         e.preventDefault()
 
         var date = Date.now()
-        var sender: string = "Thanh Bình"
+        var sender: string = userName || ''
 
         socket.emit("send-messages", { sender, message, date })
+        console.log("thành cong")
+
         setInput("")
 
         /*

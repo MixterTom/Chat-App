@@ -2,7 +2,7 @@ import { HiOutlineUserCircle } from "react-icons/hi"
 
 
 interface Info {
-    name: string,
+    name?: string,
     message?: string,
 }
 

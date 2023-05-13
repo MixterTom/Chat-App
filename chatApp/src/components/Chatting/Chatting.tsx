@@ -1,5 +1,4 @@
 import "./Chatting.scss"
-import Typing from "./UserChat/Typing/Typing"
 import HeaderTool from "./UserChat/HeaderTool/HeaderTool"
 import Receive from "./UserChat/ChattingPart/MessageReceive/Receive"
 import Send from "./UserChat/ChattingPart/MessageSend/Send"
@@ -7,10 +6,23 @@ import UserBar from "./UserBar/UserBar"
 import { useEffect, useState } from "react"
 import axios, { AxiosResponse } from "axios"
 import { io } from "socket.io-client"
+import { MdInsertEmoticon, MdOutlineAttachFile } from "react-icons/md"
+import { AiOutlineSend } from "react-icons/ai"
+import "./UserChat/Typing/Typing.scss"
 
-const socket = io('http://localhost:3000').connect()
+const socket = io("http://192.168.1.37:3000").connect()
 
 export default function Chatting() {
+
+        const [update, setUpdate] = useState(false);
+        
+
+    var userName: string = ""
+    useEffect(() => {
+        userName = localStorage.getItem("name") || ""
+        console.log(localStorage.getItem("name"))
+    }, [])
+
     function avoidBubble() {
         const iconBox = document.querySelector(".box-icon")
         if (iconBox?.classList.contains("hiding")) {
@@ -24,21 +36,76 @@ export default function Chatting() {
     const [history, setHistory] = useState<AxiosResponse>()
     useEffect(() => {
         const fetchData = async () => {
-            const data = await axios.get("http://localhost:3000/api/v1/read")
+            const data = await axios.get("http://192.168.1.37:3000/api/v1/read")
             setHistory(data)
         }
+       
         fetchData()
-    },[])
 
+    }, [update])
 
     //Realtime
-    const [newMess, setNewMess] = useState()
+
+    const [newMess, setNewMess] = useState({
+        sender: "",
+        message: ""
+    })
     useEffect(() => {
-        socket.on("messages-recieve", (data) => {
-            setNewMess(data)
-            console.log(data);
+        socket.on("messages-recieve", data => {
+            setNewMess(data.data)
+            setUpdate(!update)
         })
-    },[socket])
+    }, [socket])
+
+    function filter() {
+        if (newMess.sender == userName) {
+            return <Send message={newMess.message}></Send>
+        } else {
+            return <Receive name={newMess.sender} message={newMess.message}></Receive>
+        }
+    }
+
+    const [message, setInput] = useState("")
+    
+    //For user when they press Enter
+    function enterToSend(e: any) {
+        if (e.keycode == 13) {
+            fetchApi(e)
+        }
+        setUpdate(!update);
+    }
+
+    //For icon-box
+    function addIcon(value: string) {
+        let a = value
+        setInput(prev => prev + a)
+    }
+
+    //for show/hide box
+    function showIconBox() {
+        const iconBox = document.querySelector(".box-icon")
+        if (iconBox?.classList.contains("hiding")) {
+            iconBox.classList.remove("hiding")
+        } else {
+            iconBox?.classList.add("hiding")
+        }
+    }
+
+    //Send message
+
+
+    var userName:string = localStorage.getItem('name');
+    async function fetchApi(e: any) {
+        e.preventDefault()
+
+        var date = Date.now()
+        var sender: string = userName || ''
+
+        socket.emit("send-messages", { sender, message, date })
+        console.log("thành cong")
+
+        setInput("")
+    }
 
 
     // JSX
@@ -77,23 +144,185 @@ export default function Chatting() {
                         >
                             {history &&
                                 history.data.map((mess: any) => {
-                                    if(mess.sender == "Thanh Bình") {
-                                        return(
-                                            <Send message={mess.message}></Send>
-                                        )
-                                    }
-                                    return(
-                                        
-                                    <Receive name={mess.sender} message={mess.message}></Receive>
-                                    )
-                                })}
-
-                                <Receive name="undefined" message={newMess}></Receive>
+                                        if (mess.sender == userName) {
+                                            return <Send message={mess.message}></Send>
+                                        }
+                                        return <Receive name={mess.sender} message={mess.message}></Receive>
+                                })
+                        
+                            }
+                            {filter()}
                         </div>
                     </div>
 
                     <div className="row">
-                        <Typing />
+                    <form action="/">
+            <div className="row no-gutters stick-bottom divide">
+                <div className="col-1 tool">
+                    <div>
+                        <MdOutlineAttachFile
+                            style={{
+                                fontSize: "2rem",
+                                margin: "3px",
+                                cursor: "pointer"
+                            }}
+                            className="file-icon"
+                        ></MdOutlineAttachFile>
+                    </div>
+
+                    <div>
+                        <div
+                            className="box-icon hiding"
+                            style={{
+                                position: "absolute",
+                                bottom: "90%",
+                                left: "8%",
+                                fontSize: "1.4rem",
+                                zIndex: 3
+                            }}
+                        >
+                            <div
+                                style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    backgroundColor: "white",
+                                    borderRadius: "5px"
+                                }}
+                            >
+                                <div className="row" style={{ paddingTop: "10px" }}>
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("😊")}
+                                        style={{ cursor: "pointer", marginLeft: "10px" }}
+                                    >
+                                        😊
+                                    </p>
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("😢")}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        😢
+                                    </p>
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("😍")}
+                                        style={{ cursor: "pointer", marginRight: "10px" }}
+                                    >
+                                        😍
+                                    </p>
+                                </div>
+
+                                <div className="row">
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("😭")}
+                                        style={{ cursor: "pointer", marginLeft: "10px" }}
+                                    >
+                                        😭
+                                    </p>
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("😎")}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        😎
+                                    </p>
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("💕")}
+                                        style={{ cursor: "pointer", marginRight: "10px" }}
+                                    >
+                                        💕
+                                    </p>
+                                </div>
+
+                                <div className="row">
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("👌")}
+                                        style={{ cursor: "pointer", marginLeft: "10px" }}
+                                    >
+                                        👌
+                                    </p>
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("👍")}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        👍
+                                    </p>
+                                    <p
+                                        className="col-auto blur-button"
+                                        onClick={() => addIcon("👎")}
+                                        style={{ cursor: "pointer", marginRight: "10px" }}
+                                    >
+                                        👎
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <MdInsertEmoticon
+                            style={{
+                                fontSize: "2rem",
+                                margin: "3px",
+                                cursor: "pointer",
+                                positive: "relative"
+                            }}
+                            className="file-icon"
+                            onClick={showIconBox}
+                        ></MdInsertEmoticon>
+                    </div>
+                </div>
+                <div className="col-9">
+                    <div className="input-group mb-2">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inlineFormInputGroup"
+                            placeholder="Enter your message..."
+                            value={message}
+                            onChange={e => {
+                                setInput(e.target.value)
+                            }}
+                            style={{
+                                borderRadius: "5px",
+                                width: "90%"
+                            }}
+                            onKeyDown={e => {
+                                enterToSend(e)
+                            }}
+                        />
+                    </div>
+                </div>
+
+                <div className="col-1">
+                    <div
+                        onClick={e => {
+                            fetchApi(e)
+                        }}
+                    >
+                        <button
+                            type="submit"
+                            style={{
+                                padding: "4px 10px",
+                                borderRadius: "15px",
+                                display: "flex",
+                                justifyContent: "center",
+                                width: "65%"
+                            }}
+                            onClick={() => {setUpdate(!update)}}
+                        >
+                            <AiOutlineSend
+                                style={{
+                                    height: "1.7rem"
+                                }}
+                            ></AiOutlineSend>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
                     </div>
                 </div>
             </div>
